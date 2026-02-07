@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>thaat</title>
+    <style>
+
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-secondary: #64748b;
+            --overlay-bg: rgba(0, 0, 0, 0.85); 
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--text-color);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .card-image img {
+            transform: scale(1.05); 
+        }
+
+        .card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background-color: #eff6ff;
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-title-preview {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .url-preview{
+            display: inline-block;
+            margin-top: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--overlay-bg);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px); 
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 0;
+            border-radius: 16px;
+            width: 70%;
+            max-width: 1100px;
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.4s ease forwards;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px; 
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #ef4444;
+        }
+
+        .modal-image-container {
+            width: 100%;
+            background-color: #f1f5f9;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-image-container img {
+            max-width: 100%;
+            max-height: 60vh;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .modal-details {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .modal-details h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+        .modal-details p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin: 10px 0 20px;
+        }
+        .modal-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .modal-btn:hover {
+            background-color: #1d4ed8;
+        }
+        @media (max-width: 600px) {
+            .portfolio-grid { grid-template-columns: 1fr; }
+            .modal-content { max-height: 95vh; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WP Thaat </h1>
+    </header>
+    <div id="portfolio-container" class="portfolio-grid"></div>
+    <div id="project-modal" class="modal" onclick="closeModalOnOutside(event)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            
+            <div class="modal-image-container">
+                <img id="modal-img" src="" alt="Project Image">
+            </div>
+            
+            <div class="modal-details">
+                <h2 id="modal-title"></h2>
+                <p id="modal-tech"></p>
+                <a id="modal-link" href="#" target="_blank" class="modal-btn">زيارة الموقع</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const projects = [
+            {
+                url: "https://thaat.sa/",
+                tech: "وردبريس   ",
+                image: "images/1.png", 
+                title: "Thaat.sa"
+            },
+            {
+                url: "https://thaat.co/",
+                tech: "وردبريس  ",
+                image: "images/2.png",
+                title: "Thaat.co"
+            },
+            {
+                url: "https://drhome.sa/",
+                tech: "كود خاص (PHP Native)",
+                image: "images/3.png",
+                title: "Dr. Home"
+            },
+            {
+                url: "https://doctorsvisithome.com/",
+                tech: "وردبريس ",
+                image: "images/4.png",
+                title: "Doctors Visit Home"
+            }
+        ];
+        const container = document.getElementById('portfolio-container');
+        projects.forEach((project, index) => {
+            container.innerHTML += `
+                <div class="project-card" onclick="openModal(${index})">
+                    <div class="card-image">
+                        <img src="${project.image}" alt="${project.title}" onerror="this.src='https://placehold.co/600x400?text=No+Image'">
+                    </div>
+                    <div class="card-content">
+                        <span class="tech-badge">${project.tech}</span>
+                        <span class="card-title-preview">${project.title}</span>
+                        <a href="${project.url}" target="_blank" class="url-preview">زيارة الموقع</a>
+                    </div>
+                </div>
+            `;
+        });
+        const modal = document.getElementById('project-modal');
+        const modalImg = document.getElementById('modal-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalTech = document.getElementById('modal-tech');
+        const modalLink = document.getElementById('modal-link');
+        function openModal(index) {
+            const project = projects[index];
+            
+            modalImg.src = project.image;
+            modalTitle.innerText = project.title;
+            modalTech.innerText = `التقنية المستخدمة: ${project.tech}`;
+            modalLink.href = project.url;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+        }
+        function closeModalOnOutside(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
